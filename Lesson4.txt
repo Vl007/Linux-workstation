@@ -41,3 +41,161 @@ else
     echo "fail"
 fi
 Решение:
+
+vim script - Создаем файл с содержимым: 
+chmod 777 script
+sudo apt install members
+
+Содержание файла script:
+
+#!/bin/bash
+
+if [[ `grep 'web' /etc/group` ]]
+
+then
+
+        echo 'Список входящих пользователей в группу web:'
+
+        echo 'Пользователи для которых группа web основная'
+
+        g=$(members --two-lines web | sed '2d')
+
+        echo $g
+
+        echo 'Пользователи для которых группа web дополнительная'
+
+        sup=$(members --two-lines web | sed '1d')
+
+        echo $sup
+
+        a=$(cat /etc/group | grep web | cut -d ':' -f3)
+
+        echo 'Уникальный GID группы web = ' $a
+
+        echo 'group web is Alredy Exist. Sorry!'
+
+        echo '------------------------------------'
+
+else
+
+sudo groupadd -g 1007 web
+
+        if [[ $? == 0 ]]
+
+        then
+
+                echo 'group web is Add successful'
+
+                echo '------------------------------------'
+
+                if [[ `cat /etc/passwd | grep proba1` == '' ]]
+
+                then sudo useradd proba1 -M -N -g web
+
+                fi
+
+                if [[ `cat /etc/passwd | grep proba2` == '' ]]
+
+                then sudo useradd proba2 -M -N -G 2007
+
+                fi
+
+        else
+
+                echo 'Some problem with adding group.'
+
+        fi
+
+fi
+
+if [[ `grep 'geekbrains' /etc/group` ]]
+
+then
+
+        echo 'Список входящих пользователей в группу geekbrains:'
+
+        echo 'Пользователи для которых группа geekbrains основная'
+
+        gGeek=$(members --two-lines geekbrains | sed '2d')
+
+        echo $gGeek
+
+        echo 'Пользователи для которых группа geekbrains дополнтельная'
+
+        supGeek=$(members --two-lines geekbrains | sed '1d')
+
+        echo $supGeek
+
+        a=$(cat /etc/group | grep geekbrains | cut -d ':' -f3)
+
+        echo 'Уникальный GID = ' $a
+
+        echo 'group geekbrains Alredy Exist. Sorry!'
+
+        echo '------------------------------------'
+
+else
+
+        sudo groupadd -g 2008 geekbrains
+
+        if [[ $? == 0 ]]
+
+                then
+
+                        if [[ `cat /etc/passwd | grep proba3` == '' ]]
+
+                                then sudo useradd proba3 -M -N -g geekbrains
+
+                        fi
+
+                        echo 'group geekbrains is Add successful'
+
+                        echo '------------------------------------'
+
+        else
+
+                echo 'Some problem with adding group.'
+
+        fi
+
+fi
+
+if [[ `cat /etc/passwd | grep test` ]]
+
+then
+
+        echo 'Пользователь " test " уже есть'
+
+        UIDproba=$(id -g test)
+
+        if [[ $UIDproba != 2007 ]]
+
+        then
+
+                sudo usermod -g 1007 testt
+
+                echo 'Была изменена основная группа у пользователя test на web'
+
+        fi
+
+        UIDproba2=$(id -G test)
+
+        if [[ $UIDproba2 != 2008 ]]
+
+        then
+
+                sudo usermod -G geekbrains test
+
+                echo 'Была изменена дополнительная группа у пользователя test на geekbrains'
+
+        fi
+
+        id test
+
+else
+
+sudo useradd -u 143 -g 2008 -G 2007 -M -N test
+
+
+
+fi
