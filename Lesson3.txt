@@ -1,0 +1,219 @@
+1.echo 'Создаем каталог /tmp/lesson3/permissions'
+
+  WORKDIR="/tmp/lesson3/permissions"
+
+  WORKDIR2="/tmp/lesson3"
+
+  WORKDIR3="/tmp"
+
+  mkdir -p ${WORKDIR}
+
+  RESULT=`echo $?`
+
+  if [[ $? == 0 ]]
+
+then 
+
+	echo 'Создан каталог'
+
+	echo 'Создаем файл file1.txt с текстом'
+
+	echo 'Поздравляем вы выйграли приз!' > ${WORKDIR}/file1.txt
+
+	RESULT=`echo $?`
+
+	if [[ $? == 0 ]]
+
+	then 
+
+		echo 'file1.txt успешно создан'
+
+		#
+
+		echo 'Создаем жесткую ссылку file1_hl.txt на файл file1.txt'
+
+		ln ${WORKDIR}/file1.txt ${WORKDIR}/file1_hl.txt
+
+		echo 'Создаем символическую ссылку file1_sl.txt на файл file1.txt'
+
+		ln -s ${WORKDIR}/file1.txt ${WORKDIR}/file1_sl.txt
+
+		echo 'Создаем символическую ссылку в каталоге /tmp/lesson3 на файл-символическую ссылку /tmp/lesson3/permissions/file1_sl.txt'
+
+		ln -s  ${WORKDIR}/file1_sl.txt ${WORKDIR2}/file1_sl2.txt
+
+		echo
+
+		echo 'Содержимое файла file1.txt'
+
+		cat ${WORKDIR}/file1.txt
+
+		echo 
+
+		echo 'Содержимое файла file1_hl.txt'
+
+		cat ${WORKDIR}/file1_hl.txt
+
+		echo 
+
+		echo 'Содержимое файла file1_sl.txt'
+
+		cat ${WORKDIR}/file1_sl.txt
+
+		echo
+
+		echo 'Содержимое файла file1_sl2.txt'
+
+		cat ${WORKDIR2}/file1_sl2.tx
+
+		echo
+
+		echo 'Иноды файлов file1*'
+
+		ls -li ${WORKDIR}/file1* && ls -li ${WORKDIR2}/file1*
+
+		echo 'Иноды файла file1.txt и файла жесткой ссылки file1_hl.txt совпадают, так как указывают на тот же блок данных на диске. Иноды файлов символических ссылок отличаются, так как укзавают на файл, а не на данные'
+
+		echo
+
+		echo 'Переносим файлы ссылок из каталога '${WORKDIR}' в каталог '${WORKDIR3}
+
+		mv ${WORKDIR}/file1_* ${WORKDIR3}
+
+		echo 'Вывод содержимого перемещенных файлов ссылок в каталог'$WORKDIR
+
+		cat ${WORKDIR3}/file1_*
+
+		echo
+
+		cat ${WORKDIR2}/file1_*
+
+		echo 'Перемещение ссылок в другое расположение не разррывает связь с данными на которые они ссылаются, если источник не меняет своего места расположения'
+
+		echo 'Переместив файл ссылку file1_sl.txt, мы разорвали ее связь с ссылкой file1_sl2.tx
+
+		echo
+
+		echo 'Иноды файлов с учетом текущего размещения'
+
+		ls -li ${WORKDIR}/file1* && ls -li ${WORKDIR2}/file1* && ls -li ${WORKDIR3}/file1*
+
+		echo 'Удаление созданных скриптом каталогов и файлов'
+
+		rm -r ${WORKDIR2}
+
+	else
+
+		echo 'Ошибка создания файла file1.txt'
+
+	fi
+
+else
+
+	echo 'Ошибка создния каталога'
+
+fi  
+
+2.Создаем каталог /tmp/lesson3/permission
+
+Каталог создан
+
+Создаем файл file1.txt с текстовым содержимым
+
+file1.txt успешно создан
+
+Создаем жесткую ссылку file1_hl.txt на файл file1.txt
+
+Создаем символическую ссылку file1_sl.txt на файл file1.txt
+
+Создаем символическую ссылку /tmp/lesson3 на файл-символическую ссылку /tmp/lesson3/permissions/file1_sl.txt
+
+Содержимое файла file1.txt
+
+Поздравляем вы выйграли приз!
+
+Содержимое файла file1_hl.txt
+
+Поздравляем вы выйграли приз!
+
+Содержимое файла file1_sl.txt
+
+Поздравляем вы выйграли приз!
+
+Содержимое файла file1_sl2.txt
+
+Поздравляем вы выйграли приз!
+
+Иноды файлов file1*
+
+281474977207994 -rw-rw-rw- 2 gvido gvido 80 май 11 08:09 /tmp/lesson3/permissions/file1_hl.txt
+
+281474977207995 lrwxrwxrwx 1 gvido gvido 33 май 11 08:09 /tmp/lesson3/permissions/file1_sl.txt -> /tmp/lesson3/permissions/file1.txt
+
+281474977207994 -rw-rw-rw- 2 gvido gvido 80 май 11 08:09 /tmp/lesson3/permissions/file1.txt
+
+281474977207996 lrwxrwxrwx 1 gvido gvido 36 май 11 08:09 /tmp/lesson3/file1_sl2.txt -> /tmp/lesson3/permissions/file1_sl.txt
+
+Переносим файлы ссылок из каталога /tmp/lesson3/permissions в каталог /tmp
+
+Вывод содержимого перемещенных файлов ссылок в каталог/tmp
+
+Поздравляем вы выйграли приз!
+
+Поздравляем вы выйграли приз!
+
+Переместив файл ссылку file1_sl.txt, мы разорвали ее связь с ссылкой file1_sl2.txt
+
+Иноды файлов с учетом текущего размещения
+
+281474977207994 -rw-rw-rw- 2 gvido gvido 80 май 11 08:09 /tmp/lesson3/permissions/file1.txt
+
+281474977207996 lrwxrwxrwx 1 gvido gvido 36 май 11 08:09 /tmp/lesson3/file1_sl2.txt -> /tmp/lesson3/permissions/file1_sl.txt
+
+281474977207994 -rw-rw-rw- 2 gvido gvido 80 май 11 08:09 /tmp/file1_hl.txt
+
+281474977207995 lrwxrwxrwx 1 gvido gvido 33 май 11 08:09 /tmp/file1_sl.txt -> /tmp/lesson3/permissions/file1.txt
+
+Удаление созданных скриптом каталогов и файлов
+
+Вывод скрипта homework3.log
+
+Запуск скрипта
+
+chmod +x homework3.sh
+
+3. setuid и setgid (сокращения от англ. set user ID upon execution — «установка ID пользователя во время выполнения» и англ. set group ID upon execution — «установка ID группы во время выполнения») являются флагами прав доступа в Unix, которые разрешают пользователям запускать исполняемые файлы с правами владельца или группы исполняемого файла.
+
+setgid влияет как на файлы, так и на каталоги. При использовании для файла он выполняется с привилегиями группы пользователя, которому он принадлежит, а не с привилегиями группы пользователя, который его выполнил. 
+
+Когда бит установлен для каталога, набор файлов в этом каталоге будет иметь ту же группу, что и группа родительского каталога, а не группы пользователя, создавшего эти файлы. Это используется для общего доступа к файлам, поскольку теперь они могут быть изменены всеми пользователями, входящими в группу родительского каталога.
+
+Чтобы найти бит setgid , найдите 's' в разделе группы прав доступа к файлу, как показано в примере ниже.
+
+-rwxrwsr-x root root 1427 май 11 2020 sample_file
+
+Чтобы установить бит setgid , используйте следующую команду.
+
+chmod g+s 
+
+Чтобы удалить бит setgid , используйте следующую команду.
+
+chmod g-s 
+
+4. cd /opt/
+
+   sudo git clone https://github.com/nodejs/node
+
+   sudo apt-get install python
+
+   sudo python3-distutils install
+
+   ./configure
+
+   make -j4
+
+   sudo make install
+
+   После выполнения команды make install исполняемый файл node.js размещается файл в /usr/local/bin этот каталог добавлен в системную переменную PATH по умолчанию
+
+   which node - искал куда разместила исполняемый файл команда make install
